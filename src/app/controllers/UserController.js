@@ -1,6 +1,12 @@
 import * as Yup from 'yup'; // usa "* as" pq o yup não tem um export
 import User from '../models/User';
 
+// Regex para validação de email
+function validateEmail(email) {
+  const re = /\S+@\S+\.\S+/;
+  return re.test(email);
+}
+
 class UserController {
   // Cadastro de usuário
   async store(req, res) {
@@ -16,7 +22,15 @@ class UserController {
 
     // Ver se o req.body esta passando igual ao schema
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation fails' });
+      if (req.body.name === '')
+        return res.status(400).json({ Message: 'Digite um Nome' });
+      if (req.body.name === '')
+        return res.status(400).json({ Message: 'Digite um Email' });
+      if (req.body.password === '')
+        return res.status(400).json({ Message: 'Digite a Senha' });
+      if (req.body.email && !validateEmail(req.body.email))
+        return res.status(400).json({ Error: 'Email inserido Incorretamente' });
+      return res.status(400).json({ Error: 'Campos inseridos Incorretamente' });
     }
 
     // Procura pelo "email" se ja existe um usuário cadastrado
@@ -53,7 +67,6 @@ class UserController {
         password ? field.required().oneOf([Yup.ref('password')]) : field
       ),
     });
-
     // Ver se o req.body esta passando igual ao schema
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
@@ -81,13 +94,12 @@ class UserController {
       return res.status(401).json({ error: 'Password does not match' });
     }
 
-    const { id, name, provider } = await user.update(req.body);
+    const { id, name } = await user.update(req.body);
 
     return res.json({
       id,
       name,
       email,
-      provider,
     });
   }
 }
