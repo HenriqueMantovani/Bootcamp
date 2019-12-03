@@ -13,6 +13,8 @@ class SessionController {
       password: Yup.string().required(),
     });
 
+    console.log('Teste Docker: Session');
+
     // Ver se o req.body esta passando igual ao schema
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });

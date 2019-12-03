@@ -14,6 +14,8 @@ class UserController {
         .min(6),
     });
 
+    console.log('Teste Docker: User!');
+
     // Ver se o req.body esta passando igual ao schema
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
