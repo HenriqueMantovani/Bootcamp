@@ -20,8 +20,6 @@ class UserController {
         .min(6),
     });
 
-    console.log('Teste Docker: User!');
-
     // Ver se o req.body esta passando igual ao schema
     if (!(await schema.isValid(req.body))) {
       if (req.body.name === '')
@@ -34,6 +32,8 @@ class UserController {
         return res.status(400).json({ Error: 'Email inserido Incorretamente' });
       return res.status(400).json({ Error: 'Campos inseridos Incorretamente' });
     }
+
+    console.log('Teste Docker: User!');
 
     // Procura pelo "email" se ja existe um usuário cadastrado
     const userExists = await User.findOne({ where: { email: req.body.email } });
