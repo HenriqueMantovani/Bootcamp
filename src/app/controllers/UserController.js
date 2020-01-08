@@ -1,6 +1,8 @@
 import * as Yup from 'yup'; // usa "* as" pq o yup não tem um export
 import User from '../models/User';
 
+// Teste SSH
+
 // Regex para validação de email
 function validateEmail(email) {
   const re = /\S+@\S+\.\S+/;
