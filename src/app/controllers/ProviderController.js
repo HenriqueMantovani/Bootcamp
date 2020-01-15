@@ -3,8 +3,6 @@ import File from '../models/File';
 
 class ProviderController {
   async index(req, res) {
-    console.log('Teste Docker: Index Providers');
-
     const providers = await User.findAll({
       where: { provider: true },
       attributes: ['id', 'name', 'email', 'avatar_id'],

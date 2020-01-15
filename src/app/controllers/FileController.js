@@ -1,7 +1,5 @@
 import File from '../models/File';
 
-// Teste SSh
-
 class FileController {
   async store(req, res) {
     // originalname é o nome como estava na máquina do user. e no BD vai salvar como name

@@ -1,6 +1,6 @@
 import multer from 'multer';
 import crypto from 'crypto'; // gerar caracteres aleatórios e outras funcionalidades
-import { extname, resolve } from 'path'; // retorna a externsao daquele arquivo (extname)
+import { extname, resolve } from 'path'; // retorna a extensao daquele arquivo (extname)
 
 export default {
   storage: multer.diskStorage({
