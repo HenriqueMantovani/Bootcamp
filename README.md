@@ -1,3 +1,3 @@
 # Bootcamp
 
-Repositório para o bootcamp da Rocketseat
+Repositório para o bootcamp da Rocketseat.
