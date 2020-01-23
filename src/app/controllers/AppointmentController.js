@@ -1,9 +1,9 @@
 import * as Yup from 'yup';
-import { startOfHour, parseISO, isBefore, format } from 'date-fns';
+import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 
 // Models
-import Appointments from '../models/Appointments';
+import Appointment from '../models/Appointments';
 import User from '../models/User';
 import File from '../models/File';
 
@@ -42,7 +42,7 @@ class AppointmentController {
     }
 
     // Check date availability
-    const checkAvailability = await Appointments.findOne({
+    const checkAvailability = await Appointment.findOne({
       where: {
         provider_id,
         canceled_at: null,
@@ -61,7 +61,7 @@ class AppointmentController {
         .status(422)
         .json({ message: 'Usuário não pode agendar um hórario consigo mesmo' });
 
-    const appointment = await Appointments.create({
+    const appointment = await Appointment.create({
       user_id: req.userId,
       provider_id,
       date: hourStart,
@@ -85,7 +85,7 @@ class AppointmentController {
   async index(req, res) {
     const { page = 1 } = req.query;
 
-    const appointments = await Appointments.findAll({
+    const appointments = await Appointment.findAll({
       where: { user_id: req.userId, canceled_at: null },
       order: ['date'],
       attributes: ['id', 'date'],
@@ -108,6 +108,29 @@ class AppointmentController {
     });
 
     return res.status(200).json(appointments);
+  }
+
+  async delete(req, res) {
+    const appointment = await Appointment.findByPk(req.params.id);
+
+    if (appointment.user_id !== req.userId)
+      return res.status(401).json({
+        error: "You don't have permission to cancel this appointment",
+      });
+
+    const dateWithSub = subHours(appointment.date, 2);
+
+    if (isBefore(dateWithSub, new Date())) {
+      return res.status(401).json({
+        error: 'You can only cancel appointments 2 hours in advance',
+      });
+    }
+
+    appointment.canceled_at = new Date();
+
+    await appointment.save();
+
+    return res.json(appointment);
   }
 }
 
