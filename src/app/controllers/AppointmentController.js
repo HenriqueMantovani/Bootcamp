@@ -1,9 +1,13 @@
 import * as Yup from 'yup';
 import { startOfHour, parseISO, isBefore } from 'date-fns';
 
+// Models
 import Appointments from '../models/Appointments';
 import User from '../models/User';
 import File from '../models/File';
+
+// Schemas
+import Notification from '../schemas/Notification';
 
 class AppointmentController {
   async store(req, res) {
@@ -56,6 +60,8 @@ class AppointmentController {
       provider_id,
       date: hourStart,
     });
+
+    /* Notificar prestador de serciço */
 
     return res.json(appointment);
   }
