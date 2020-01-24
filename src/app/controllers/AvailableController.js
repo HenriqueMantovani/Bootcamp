@@ -11,7 +11,7 @@ import { Op } from 'sequelize';
 
 import Appointments from '../models/Appointments';
 
-class AvailavleController {
+class AvailableController {
   async index(req, res) {
     const { date } = req.query;
 
@@ -66,4 +66,4 @@ class AvailavleController {
   }
 }
 
-export default new AvailavleController();
+export default new AvailableController();
