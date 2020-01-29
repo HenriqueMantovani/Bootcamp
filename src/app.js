@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import express from 'express';
 import 'express-async-errors';
 import Youch from 'youch';
@@ -46,9 +48,13 @@ class App {
     // Express entende que quando um middleware recebe 4 parametros, é pq esse middleware
     // para tratamento de execão
     this.server.use(async (err, req, res, next) => {
-      const errors = await new Youch(err, req).toJSON();
+      if (process.env.NODE_ENV === 'developments') {
+        const errors = await new Youch(err, req).toJSON();
 
-      return res.status(500).json(errors);
+        return res.status(500).json(errors);
+      }
+
+      return res.status(500).json({ error: 'Internal server error' });
     });
   }
 }
